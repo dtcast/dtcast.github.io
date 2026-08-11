@@ -141,7 +141,7 @@
           <div class="card-icon" aria-hidden="true">
             <svg viewBox="0 0 64 64"><path d="M11 17h42M11 32h42M11 47h42"/><circle cx="20" cy="17" r="5"/><circle cx="44" cy="32" r="5"/><circle cx="28" cy="47" r="5"/></svg>
           </div>
-          <h3>Data Collection<br>&amp; Pipeline</h3>
+          <h3>Data Collection<br>&amp; Pipeline Engineering</h3>
           <p>리뷰, 댓글, 플랫폼, API 등 흩어진 외부 데이터를 지속적으로 수집하고, 분석과 AI가 바로 사용할 수 있는 신뢰도 높은 파이프라인으로 운영합니다.</p>
           <ul><li>리뷰 / 댓글</li><li>Web &amp; API</li><li>ETL / ELT</li><li>Data Quality</li></ul>
         </article>
@@ -259,24 +259,55 @@
         </div>
       </div>
 
-      <div class="cmf-lab reveal" aria-label="CMF 이미지 분석 과정을 표현한 그래픽">
-        <div class="lab-header"><span>CMF VISION LAB</span><span>MODEL / 2906780</span></div>
-        <div class="object-stage">
-          <div class="object-chair" aria-hidden="true">
-            <span class="chair-back"></span><span class="chair-seat"></span><span class="chair-leg left"></span><span class="chair-leg right"></span>
-            <i class="scan-line"></i>
+      <div class="ip-labs">
+        <div class="cmf-lab reveal" aria-label="CMF 이미지 분석 과정을 표현한 그래픽">
+          <div class="lab-header"><span>CMF VISION LAB</span><span>MODEL / 2906780</span></div>
+          <div class="object-stage">
+            <div class="object-chair" aria-hidden="true">
+              <span class="chair-back"></span><span class="chair-seat"></span><span class="chair-leg left"></span><span class="chair-leg right"></span>
+              <i class="scan-line"></i>
+            </div>
+            <span class="detect-box box-one"><b>PART_01</b></span>
+            <span class="detect-box box-two"><b>PART_02</b></span>
+            <div class="object-caption"><span>OBJECT</span><b>LOUNGE CHAIR</b><em>98.7%</em></div>
           </div>
-          <span class="detect-box box-one"><b>PART_01</b></span>
-          <span class="detect-box box-two"><b>PART_02</b></span>
-          <div class="object-caption"><span>OBJECT</span><b>LOUNGE CHAIR</b><em>98.7%</em></div>
+          <div class="cmf-results">
+            <div><span class="swatch swatch-color"></span><small>COLOR</small><b>WARM TAUPE</b><em>0.94</em></div>
+            <div><span class="swatch swatch-material"></span><small>MATERIAL</small><b>TEXTILE</b><em>0.89</em></div>
+            <div><span class="swatch swatch-finish"></span><small>FINISH</small><b>SOFT MATTE</b><em>0.91</em></div>
+          </div>
+          <div class="similarity"><span>SIMILARITY SCORE</span><i><em></em></i><strong>92.4</strong></div>
+          <div class="lab-pipeline" aria-label="CMF 이미지 검색 처리 단계"><span>SEGMENT</span><i>→</i><span>CLASSIFY</span><i>→</i><span>COMPARE</span><i>→</i><span>RETRIEVE</span></div>
         </div>
-        <div class="cmf-results">
-          <div><span class="swatch swatch-color"></span><small>COLOR</small><b>WARM TAUPE</b><em>0.94</em></div>
-          <div><span class="swatch swatch-material"></span><small>MATERIAL</small><b>TEXTILE</b><em>0.89</em></div>
-          <div><span class="swatch swatch-finish"></span><small>FINISH</small><b>SOFT MATTE</b><em>0.91</em></div>
+
+        <div class="text-lab reveal" aria-label="리뷰 텍스트에서 감성, 주제, 의도를 추출하는 과정을 표현한 그래픽">
+          <div class="lab-header"><span>TEXT MINING LAB</span><span>MODEL / 2410715</span></div>
+          <div class="text-mining-stage">
+            <div class="corpus-panel">
+              <div class="corpus-head"><span>INPUT / REVIEW CORPUS</span><em>LIVE</em></div>
+              <p class="corpus-line line-one"><span>R_1042</span><b>배송은 빨랐고 <mark>제품 품질</mark>도 기대 이상이에요.</b></p>
+              <p class="corpus-line line-two"><span>R_1043</span><b><mark>상담 응답</mark>은 좋았지만 가격은 조금 아쉬워요.</b></p>
+              <p class="corpus-line line-three"><span>R_1044</span><b>재구매 의향이 있고 <mark>친구에게 추천</mark>하고 싶어요.</b></p>
+              <p class="corpus-line line-four"><span>R_1045</span><b>포장이 견고하고 사용 경험도 만족스럽습니다.</b></p>
+            </div>
+            <div class="topic-map" aria-hidden="true">
+              <span class="topic-ring ring-one"></span><span class="topic-ring ring-two"></span>
+              <strong>NLP<small>CORE</small></strong>
+              <b class="topic topic-quality">품질<em>.91</em></b>
+              <b class="topic topic-service">서비스<em>.84</em></b>
+              <b class="topic topic-price">가격<em>.76</em></b>
+              <b class="topic topic-intent">추천 의향<em>.88</em></b>
+            </div>
+            <i class="mining-scan" aria-hidden="true"></i>
+          </div>
+          <div class="text-results">
+            <div><small>SENTIMENT</small><b>POSITIVE</b><em>78%</em></div>
+            <div><small>TOPIC</small><b>PRODUCT QUALITY</b><em>0.91</em></div>
+            <div><small>INTENT</small><b>RECOMMEND</b><em>0.88</em></div>
+          </div>
+          <div class="text-confidence"><span>MODEL CONFIDENCE</span><i><em></em></i><strong>0.93</strong></div>
+          <div class="lab-pipeline text-pipeline" aria-label="텍스트 마이닝 처리 단계"><span>TOKENIZE</span><i>→</i><span>EMBED</span><i>→</i><span>CLASSIFY</span><i>→</i><span>ACT</span></div>
         </div>
-        <div class="similarity"><span>SIMILARITY SCORE</span><i><em></em></i><strong>92.4</strong></div>
-        <div class="lab-pipeline" aria-label="CMF 이미지 검색 처리 단계"><span>SEGMENT</span><i>→</i><span>CLASSIFY</span><i>→</i><span>COMPARE</span><i>→</i><span>RETRIEVE</span></div>
       </div>
     </section>
 
