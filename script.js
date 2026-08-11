@@ -68,6 +68,132 @@ if (!reducedMotion && 'IntersectionObserver' in window) {
   counters.forEach((counter) => countObserver.observe(counter));
 }
 
+const patentSection = document.querySelector('.technology');
+const patentTabs = [...document.querySelectorAll('[data-patent-tab]')];
+const patentPanels = [...document.querySelectorAll('[data-patent-panel]')];
+
+if (patentSection && patentTabs.length > 1 && patentPanels.length) {
+  const patentInteractiveAreas = [
+    patentSection.querySelector('.ip-register'),
+    patentSection.querySelector('.ip-labs'),
+  ].filter(Boolean);
+  let patentIndex = Math.max(0, patentTabs.findIndex((tab) => tab.classList.contains('is-active')));
+  let patentTimer = null;
+  let patentInView = false;
+  let patentPaused = false;
+  const patentPauseReasons = new Set();
+
+  const updatePatentPauseState = () => {
+    patentSection.classList.toggle(
+      'is-patent-paused',
+      reducedMotion || patentPaused || !patentInView || document.hidden,
+    );
+  };
+
+  const stopPatentTimer = () => {
+    window.clearInterval(patentTimer);
+    patentTimer = null;
+  };
+
+  const startPatentTimer = () => {
+    stopPatentTimer();
+    updatePatentPauseState();
+    if (reducedMotion || patentPaused || !patentInView || document.hidden) return;
+    patentTimer = window.setInterval(() => {
+      activatePatent(patentIndex + 1);
+    }, 5000);
+  };
+
+  const activatePatent = (nextIndex, { focus = false } = {}) => {
+    patentIndex = (nextIndex + patentTabs.length) % patentTabs.length;
+    const activeTab = patentTabs[patentIndex];
+    const patentKey = activeTab.dataset.patentTab;
+
+    patentTabs.forEach((tab, index) => {
+      tab.classList.remove('is-active');
+      const isActive = index === patentIndex;
+      tab.setAttribute('aria-selected', String(isActive));
+      tab.tabIndex = isActive ? 0 : -1;
+    });
+
+    // Reflow restarts the five-second progress indicator for the selected patent.
+    void activeTab.offsetWidth;
+    activeTab.classList.add('is-active');
+
+    patentPanels.forEach((panel) => {
+      const isActive = panel.dataset.patentPanel === patentKey;
+      panel.classList.toggle('is-active', isActive);
+      panel.setAttribute('aria-hidden', String(!isActive));
+    });
+
+    if (focus) activeTab.focus();
+  };
+
+  patentTabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => {
+      activatePatent(index);
+      startPatentTimer();
+    });
+
+    tab.addEventListener('keydown', (event) => {
+      const keys = ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End'];
+      if (!keys.includes(event.key)) return;
+      event.preventDefault();
+
+      let nextIndex = index;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = index + 1;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = index - 1;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = patentTabs.length - 1;
+      activatePatent(nextIndex, { focus: true });
+      startPatentTimer();
+    });
+  });
+
+  const setPatentPaused = (reason, isPaused) => {
+    if (isPaused) patentPauseReasons.add(reason);
+    else patentPauseReasons.delete(reason);
+    patentPaused = patentPauseReasons.size > 0;
+    if (patentPaused) stopPatentTimer();
+    else startPatentTimer();
+    updatePatentPauseState();
+  };
+
+  patentInteractiveAreas.forEach((area, index) => {
+    const pointerReason = `pointer-${index}`;
+    const focusReason = `focus-${index}`;
+    area.addEventListener('pointerenter', () => setPatentPaused(pointerReason, true));
+    area.addEventListener('pointerleave', () => setPatentPaused(pointerReason, false));
+    area.addEventListener('focusin', () => setPatentPaused(focusReason, true));
+    area.addEventListener('focusout', (event) => {
+      if (!area.contains(event.relatedTarget)) setPatentPaused(focusReason, false);
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const patentObserver = new IntersectionObserver(([entry]) => {
+      const wasInView = patentInView;
+      patentInView = entry.isIntersecting;
+      if (patentInView && !wasInView) activatePatent(patentIndex);
+      if (patentInView) startPatentTimer();
+      else stopPatentTimer();
+      updatePatentPauseState();
+    }, { threshold: .2 });
+    patentObserver.observe(patentSection);
+  } else {
+    patentInView = true;
+    startPatentTimer();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopPatentTimer();
+    else startPatentTimer();
+    updatePatentPauseState();
+  });
+
+  updatePatentPauseState();
+}
+
 if (cursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   window.addEventListener('pointermove', (event) => {
     cursor.style.left = `${event.clientX}px`;

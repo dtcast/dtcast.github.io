@@ -290,21 +290,30 @@ button { color: inherit; font: inherit; }
 .technology-copy > p:not(.eyebrow) { max-width: 690px; margin: 0; color: #a7a9a2; font-size: .95rem; line-height: 1.9; word-break: keep-all; }
 .ip-register { margin-top: 48px; border: 1px solid var(--line-dark); background: #0d100d; }
 .ip-register-head { display: flex; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid var(--line-dark); color: #73766f; font: .5rem var(--display); letter-spacing: .14em; }
-.ip-entry { position: relative; display: grid; grid-template-columns: 68px 1fr minmax(150px, .55fr); gap: 20px; align-items: center; min-height: 134px; padding: 18px 16px; border-bottom: 1px solid var(--line-dark); }
+.ip-tabs { display: grid; }
+.ip-entry { position: relative; display: grid; width: 100%; grid-template-columns: 68px 1fr minmax(150px, .55fr); gap: 20px; align-items: center; min-height: 134px; margin: 0; padding: 18px 16px; appearance: none; border: 0; border-bottom: 1px solid var(--line-dark); color: inherit; background: transparent; font: inherit; text-align: left; cursor: pointer; transition: background .3s ease; }
 .ip-entry:last-child { border-bottom: 0; }
-.ip-entry.is-current { background: linear-gradient(90deg, rgba(220, 103, 52, .09), transparent 45%); }
-.ip-entry.is-current::before { position: absolute; inset: 0 auto 0 0; width: 3px; content: ""; background: var(--signal); }
+.ip-entry:hover { background: rgba(238, 234, 224, .025); }
+.ip-entry:focus-visible { z-index: 2; outline: 1px solid var(--signal); outline-offset: -3px; }
+.ip-entry.is-active { background: linear-gradient(90deg, rgba(220, 103, 52, .1), transparent 48%); }
+.ip-entry.is-active::before { position: absolute; inset: 0 auto 0 0; width: 3px; content: ""; background: var(--signal); }
+.ip-entry::after { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; content: ""; background: linear-gradient(90deg, var(--signal), var(--acid)); transform: scaleX(0); transform-origin: left; }
+.ip-entry.is-active::after { animation: patentProgress 5s linear both; }
+.technology.is-patent-paused .ip-entry.is-active::after { animation-play-state: paused; }
 .ip-index { align-self: stretch; display: flex; flex-direction: column; justify-content: space-between; padding-right: 12px; border-right: 1px solid var(--line-dark); }
 .ip-index span { color: #72756e; font: .48rem var(--display); letter-spacing: .13em; }
 .ip-index b { color: #92958d; font: 600 .72rem var(--display); }
-.ip-body h3 { margin: 0; color: #d8d8d1; font: 600 .92rem/1.4 var(--display); word-break: keep-all; }
-.ip-body p { margin: 10px 0 0; color: #6f726b; font: .5rem var(--display); letter-spacing: .04em; line-height: 1.6; }
+.ip-body > strong { display: block; margin: 0; color: #d8d8d1; font: 600 .92rem/1.4 var(--display); word-break: keep-all; }
+.ip-body > small { display: block; margin: 10px 0 0; color: #6f726b; font: .5rem/1.6 var(--display); letter-spacing: .04em; }
 .ip-meta { display: flex; flex-direction: column; align-items: flex-start; }
 .ip-meta span { margin-bottom: 8px; padding: 4px 6px; color: var(--acid); border: 1px solid rgba(233, 245, 117, .26); font: .45rem var(--display); letter-spacing: .12em; }
 .ip-meta strong { color: #c2c4bc; font: 600 .7rem var(--display); letter-spacing: .03em; }
 .ip-meta small { margin-top: 7px; color: #646760; font: .46rem var(--display); }
 
-.ip-labs { align-self: center; display: grid; gap: 18px; }
+.ip-labs { align-self: center; display: grid; }
+.ip-lab-panel { grid-area: 1 / 1; visibility: hidden; opacity: 0; pointer-events: none; transform: translateY(14px) scale(.985); transition: opacity .42s cubic-bezier(.2,.7,.2,1), transform .42s cubic-bezier(.2,.7,.2,1), visibility 0s linear .42s; }
+.ip-lab-panel.is-active { z-index: 1; visibility: visible; opacity: 1; pointer-events: auto; transform: none; transition-delay: 0s; }
+.ip-lab-panel:not(.is-active) * { animation-play-state: paused; }
 .cmf-lab, .text-lab { border: 1px solid var(--line-dark); background: #0c0f0c; }
 .lab-header { display: flex; justify-content: space-between; padding: 15px 17px; border-bottom: 1px solid var(--line-dark); color: #73766f; font: .54rem var(--display); letter-spacing: .14em; }
 .object-stage { position: relative; min-height: 400px; overflow: hidden; border-bottom: 1px solid var(--line-dark); background-image: linear-gradient(rgba(238,234,224,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(238,234,224,.035) 1px, transparent 1px); background-size: 30px 30px; }
@@ -413,6 +422,7 @@ button { color: inherit; font: inherit; }
 .reveal.is-visible { opacity: 1; transform: none; }
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+@keyframes patentProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes radar { to { transform: rotate(360deg); } }
 @keyframes scan { from { transform: translateY(0); } to { transform: translateY(240px); } }
 @keyframes loadbar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
@@ -518,7 +528,7 @@ button { color: inherit; font: inherit; }
   .technology-copy .section-number { margin-bottom: 55px; }
   .ip-entry { grid-template-columns: 52px 1fr; gap: 15px; min-height: auto; padding: 18px 14px; }
   .ip-meta { grid-column: 2; padding-top: 13px; border-top: 1px solid var(--line-dark); }
-  .ip-body h3 { font-size: .86rem; }
+  .ip-body > strong { font-size: .86rem; }
   .object-stage { min-height: 370px; }
   .cmf-results { grid-template-columns: 1fr; }
   .cmf-results > div { border-right: 0; border-bottom: 1px solid var(--line-dark); }
