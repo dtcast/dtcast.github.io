@@ -68,6 +68,222 @@ if (!reducedMotion && 'IntersectionObserver' in window) {
   counters.forEach((counter) => countObserver.observe(counter));
 }
 
+const caseDeck = document.querySelector('[data-case-deck]');
+const caseViewport = caseDeck?.querySelector('[data-case-viewport]');
+const caseSlides = [...(caseDeck?.querySelectorAll('[data-case-slide]') || [])];
+const caseButtons = [...(caseDeck?.querySelectorAll('[data-case-go]') || [])];
+const casePrev = caseDeck?.querySelector('[data-case-prev]');
+const caseNext = caseDeck?.querySelector('[data-case-next]');
+const casePause = caseDeck?.querySelector('[data-case-pause]');
+const caseCurrent = caseDeck?.querySelector('[data-case-current]');
+const caseName = caseDeck?.querySelector('[data-case-name]');
+
+if (caseDeck && caseViewport && caseSlides.length > 1) {
+  const caseLabels = [
+    '현대자동차그룹 · 글로벌 리뷰 인텔리전스 플랫폼',
+    '㈜세스코 · 카카오톡 이미지 인증 캠페인 시스템',
+    'Netnography.ai · 실시간 소셜 리스닝 플랫폼',
+    'Band&Cast · 인플루언서 마케팅 운영 플랫폼',
+    '㈜유닉스 · SNS 빅데이터 기반 드라이어 U&A 조사',
+    '농협중앙회 · 스마트스토어 판매 현황 모니터링 도구',
+  ];
+  const turnDuration = 7000;
+  const transitionDuration = 800;
+  const casePauseReasons = new Set();
+  let caseIndex = Math.max(0, caseSlides.findIndex((slide) => slide.classList.contains('is-active')));
+  let caseTimer = null;
+  let caseTransitionTimer = null;
+  let caseInView = false;
+  let caseTransitioning = false;
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  const updateCaseHeight = (slide = caseSlides[caseIndex]) => {
+    if (!slide) return;
+    caseViewport.style.height = `${slide.offsetHeight}px`;
+  };
+
+  const shouldPauseCases = () => (
+    reducedMotion || casePauseReasons.size > 0 || !caseInView || document.hidden
+  );
+
+  const updateCasePauseState = () => {
+    const isPaused = shouldPauseCases();
+    caseDeck.classList.toggle('is-paused', isPaused);
+    casePause?.setAttribute('aria-pressed', String(casePauseReasons.has('manual')));
+    const pauseLabel = casePause?.querySelector('span');
+    if (pauseLabel) pauseLabel.textContent = casePauseReasons.has('manual') ? 'RESUME AUTO TURN' : 'PAUSE AUTO TURN';
+  };
+
+  const stopCaseTimer = () => {
+    window.clearTimeout(caseTimer);
+    caseTimer = null;
+  };
+
+  const startCaseTimer = () => {
+    stopCaseTimer();
+    updateCasePauseState();
+    if (shouldPauseCases()) return;
+    caseTimer = window.setTimeout(() => activateCase(caseIndex + 1, 'forward'), turnDuration);
+  };
+
+  const updateCaseControls = () => {
+    caseButtons.forEach((button, index) => {
+      const isActive = index === caseIndex;
+      button.classList.remove('is-active');
+      button.setAttribute('aria-selected', String(isActive));
+      button.tabIndex = isActive ? 0 : -1;
+    });
+    const activeButton = caseButtons[caseIndex];
+    if (activeButton) {
+      void activeButton.offsetWidth;
+      activeButton.classList.add('is-active');
+    }
+    if (caseCurrent) caseCurrent.textContent = String(caseIndex + 1).padStart(2, '0');
+    if (caseName) caseName.textContent = caseLabels[caseIndex];
+  };
+
+  const activateCase = (nextIndex, direction = 'forward', { focus = false } = {}) => {
+    if (caseTransitioning) return;
+    const normalizedIndex = (nextIndex + caseSlides.length) % caseSlides.length;
+    if (normalizedIndex === caseIndex) {
+      startCaseTimer();
+      return;
+    }
+
+    caseTransitioning = true;
+    stopCaseTimer();
+    window.clearTimeout(caseTransitionTimer);
+
+    const currentSlide = caseSlides[caseIndex];
+    const nextSlide = caseSlides[normalizedIndex];
+    const outgoingClass = direction === 'backward' ? 'is-leaving-backward' : 'is-leaving-forward';
+    const incomingClass = direction === 'backward' ? 'is-entering-backward' : 'is-entering-forward';
+    const transitionHeight = Math.max(currentSlide.offsetHeight, nextSlide.offsetHeight);
+
+    currentSlide.classList.remove('is-active');
+    currentSlide.classList.add(outgoingClass);
+    currentSlide.setAttribute('aria-hidden', 'true');
+    currentSlide.setAttribute('inert', '');
+
+    nextSlide.classList.remove('is-entering-forward', 'is-entering-backward');
+    void nextSlide.offsetWidth;
+    nextSlide.classList.add('is-active', incomingClass);
+    nextSlide.setAttribute('aria-hidden', 'false');
+    nextSlide.removeAttribute('inert');
+
+    caseViewport.style.height = `${transitionHeight}px`;
+    caseIndex = normalizedIndex;
+    updateCaseControls();
+    window.requestAnimationFrame(() => updateCaseHeight(nextSlide));
+
+    if (focus) caseButtons[caseIndex]?.focus();
+
+    caseTransitionTimer = window.setTimeout(() => {
+      currentSlide.classList.remove('is-leaving-forward', 'is-leaving-backward');
+      nextSlide.classList.remove('is-entering-forward', 'is-entering-backward');
+      caseTransitioning = false;
+      updateCaseHeight(nextSlide);
+      startCaseTimer();
+    }, reducedMotion ? 10 : transitionDuration);
+  };
+
+  caseSlides.forEach((slide, index) => {
+    const isActive = index === caseIndex;
+    slide.setAttribute('aria-hidden', String(!isActive));
+    slide.toggleAttribute('inert', !isActive);
+  });
+  updateCaseControls();
+  window.requestAnimationFrame(() => updateCaseHeight());
+
+  caseButtons.forEach((button, index) => {
+    button.addEventListener('click', () => {
+      const direction = index < caseIndex ? 'backward' : 'forward';
+      activateCase(index, direction);
+    });
+    button.addEventListener('keydown', (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === 'Home') activateCase(0, 'backward', { focus: true });
+      else if (event.key === 'End') activateCase(caseSlides.length - 1, 'forward', { focus: true });
+      else if (event.key === 'ArrowLeft') activateCase(caseIndex - 1, 'backward', { focus: true });
+      else activateCase(caseIndex + 1, 'forward', { focus: true });
+    });
+  });
+
+  casePrev?.addEventListener('click', () => activateCase(caseIndex - 1, 'backward'));
+  caseNext?.addEventListener('click', () => activateCase(caseIndex + 1, 'forward'));
+  casePause?.addEventListener('click', () => {
+    casePauseReasons.delete('focus');
+    if (casePauseReasons.has('manual')) casePauseReasons.delete('manual');
+    else casePauseReasons.add('manual');
+    startCaseTimer();
+  });
+
+  caseDeck.addEventListener('keydown', (event) => {
+    if (event.target.closest('[data-case-go]')) return;
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      activateCase(caseIndex - 1, 'backward');
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      activateCase(caseIndex + 1, 'forward');
+    }
+  });
+
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    caseDeck.addEventListener('pointerenter', () => {
+      casePauseReasons.add('pointer');
+      stopCaseTimer();
+      updateCasePauseState();
+    });
+    caseDeck.addEventListener('pointerleave', () => {
+      casePauseReasons.delete('pointer');
+      startCaseTimer();
+    });
+  }
+
+  caseViewport.addEventListener('touchstart', (event) => {
+    const touch = event.changedTouches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+  }, { passive: true });
+  caseViewport.addEventListener('touchend', (event) => {
+    const touch = event.changedTouches[0];
+    const distanceX = touch.clientX - touchStartX;
+    const distanceY = touch.clientY - touchStartY;
+    if (Math.abs(distanceX) < 48 || Math.abs(distanceX) < Math.abs(distanceY) * 1.2) return;
+    activateCase(caseIndex + (distanceX < 0 ? 1 : -1), distanceX < 0 ? 'forward' : 'backward');
+  }, { passive: true });
+
+  if ('IntersectionObserver' in window) {
+    const caseObserver = new IntersectionObserver(([entry]) => {
+      caseInView = entry.isIntersecting;
+      if (caseInView) startCaseTimer();
+      else stopCaseTimer();
+      updateCasePauseState();
+    }, { threshold: .18 });
+    caseObserver.observe(caseDeck);
+  } else {
+    caseInView = true;
+    startCaseTimer();
+  }
+
+  if ('ResizeObserver' in window) {
+    const caseResizeObserver = new ResizeObserver(() => updateCaseHeight());
+    caseSlides.forEach((slide) => caseResizeObserver.observe(slide));
+  } else {
+    window.addEventListener('resize', () => updateCaseHeight(), { passive: true });
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopCaseTimer();
+    else startCaseTimer();
+    updateCasePauseState();
+  });
+}
+
 const patentSection = document.querySelector('.technology');
 const patentTabs = [...document.querySelectorAll('[data-patent-tab]')];
 const patentPanels = [...document.querySelectorAll('[data-patent-panel]')];

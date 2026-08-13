@@ -12,7 +12,7 @@
   <link rel="canonical" href="https://datacast.kr/">
   <link rel="icon" href="assets/datacast-mark-dark.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/datacast-mark-dark.png">
-  <link rel="stylesheet" href="styles.css?v=20260813-work">
+  <link rel="stylesheet" href="styles.css?v=20260813-deck">
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -102,14 +102,30 @@
         </div>
       </div>
       <div class="reference-grid section-shell" aria-label="주요 프로젝트 경험 조직">
-        <article class="reference-item reveal"><span>01</span><strong>현대자동차그룹</strong><small>HYUNDAI MOTOR GROUP</small></article>
-        <article class="reference-item reveal"><span>02</span><strong>㈜세스코</strong><small>CESCO · ENVIRONMENTAL HYGIENE</small></article>
-        <article class="reference-item reveal"><span>03</span><strong>㈜유닉스전자</strong><small>UNIX ELECTRONICS</small></article>
-        <article class="reference-item reveal"><span>04</span><strong>㈜풀무원</strong><small>PULMUONE · FOOD &amp; FMCG</small></article>
-        <article class="reference-item reveal"><span>05</span><strong>농협중앙회</strong><small>NATIONAL AGRICULTURAL COOPERATIVE FEDERATION</small></article>
-        <article class="reference-item reveal"><span>06</span><strong>이화여자대학교<br>산학협력단</strong><small>EWHA WOMANS UNIVERSITY</small></article>
-        <article class="reference-item reveal"><span>07</span><strong>㈜엔피프틴파트너스</strong><small>N15PARTNERS · VENTURE</small></article>
-        <article class="reference-item reveal"><span>08</span><strong>㈜밴드앤링크</strong><small>BAND&amp;LINK · MARKETING</small></article>
+        <article class="reference-item reference-dark reveal">
+          <span>01 / MOBILITY</span><div class="reference-logo"><img src="assets/clients/hyundai-motor-group.svg" alt="현대자동차그룹"></div><small>GLOBAL MOBILITY</small>
+        </article>
+        <article class="reference-item reference-light reveal">
+          <span>02 / HYGIENE</span><div class="reference-logo"><img src="assets/clients/cesco.png" alt="㈜세스코"></div><small>ENVIRONMENTAL HYGIENE</small>
+        </article>
+        <article class="reference-item reference-dark reveal">
+          <span>03 / BEAUTY TECH</span><div class="reference-logo"><img src="assets/clients/unix.png" alt="㈜유닉스"></div><small>CONSUMER ELECTRONICS</small>
+        </article>
+        <article class="reference-item reference-light reveal">
+          <span>04 / FOOD</span><div class="reference-logo"><img src="assets/clients/pulmuone-ci.gif" alt="㈜풀무원"></div><small>FOOD &amp; FMCG</small>
+        </article>
+        <article class="reference-item reference-light reveal">
+          <span>05 / COOPERATIVE</span><div class="reference-logo"><img src="assets/clients/nonghyup.png" alt="농협중앙회"></div><small>COMMERCE &amp; FINANCE</small>
+        </article>
+        <article class="reference-item reference-light reveal">
+          <span>06 / ACADEMIA</span><div class="reference-logo"><img src="assets/clients/ewha.png" alt="이화여자대학교 산학협력단"></div><small>RESEARCH &amp; EDUCATION</small>
+        </article>
+        <article class="reference-item reference-dark reveal">
+          <span>07 / VENTURE</span><div class="reference-logo reference-logo-wide"><img src="assets/clients/n15partners.png" alt="㈜엔피프틴파트너스"></div><small>ACCELERATION &amp; VENTURE</small>
+        </article>
+        <article class="reference-item reference-light reveal">
+          <span>08 / MARKETING</span><div class="reference-logo"><img src="assets/clients/bandnlink.svg" alt="㈜밴드앤링크"></div><small>BRAND &amp; CREATOR</small>
+        </article>
       </div>
     </section>
 
@@ -188,8 +204,9 @@
         <p>리서치에서 수집 엔진, AI 분석, 운영 제품까지. 서로 다른 산업의 문제를 실제로 사용되는 시스템으로 전환한 사례입니다.</p>
       </div>
 
-      <div class="work-stack section-shell">
-      <article class="case-study work-case reveal">
+      <div class="case-deck section-shell reveal" data-case-deck tabindex="0" aria-label="Featured Work 사례 보기">
+      <div class="case-viewport" data-case-viewport>
+      <article class="case-study work-case case-slide is-active" id="case-slide-01" data-case-slide aria-hidden="false">
         <div class="case-main">
           <div class="case-meta">
             <span>2025—2026</span>
@@ -243,7 +260,7 @@
         </div>
       </article>
 
-      <article class="portfolio-case reveal" aria-labelledby="case-cesco-title">
+      <article class="portfolio-case case-slide" id="case-slide-02" data-case-slide aria-hidden="true" aria-labelledby="case-cesco-title">
         <div class="portfolio-copy">
           <div class="case-meta"><span>CASE / 02</span><span>CAMPAIGN AUTOMATION</span></div>
           <p class="case-kicker">㈜세스코</p>
@@ -268,7 +285,7 @@
         <div class="portfolio-flow"><span>01</span><b>UPLOAD</b><i>→</i><span>02</span><b>DETECT</b><i>→</i><span>03</span><b>VALIDATE</b><i>→</i><span>04</span><b>ENTER</b></div>
       </article>
 
-      <article class="portfolio-case is-reverse reveal" aria-labelledby="case-netnography-title">
+      <article class="portfolio-case is-reverse case-slide" id="case-slide-03" data-case-slide aria-hidden="true" aria-labelledby="case-netnography-title">
         <div class="portfolio-copy">
           <div class="case-meta"><span>CASE / 03</span><span>PROPRIETARY PLATFORM</span></div>
           <p class="case-kicker">NETNOGRAPHY.AI</p>
@@ -292,7 +309,7 @@
         <div class="portfolio-flow"><span>01</span><b>COLLECT</b><i>→</i><span>02</span><b>NORMALIZE</b><i>→</i><span>03</span><b>ANALYZE</b><i>→</i><span>04</span><b>VISUALIZE</b></div>
       </article>
 
-      <article class="portfolio-case reveal" aria-labelledby="case-bandcast-title">
+      <article class="portfolio-case case-slide" id="case-slide-04" data-case-slide aria-hidden="true" aria-labelledby="case-bandcast-title">
         <div class="portfolio-copy">
           <div class="case-meta"><span>CASE / 04</span><span>PROPRIETARY PLATFORM</span></div>
           <p class="case-kicker">BAND&amp;CAST</p>
@@ -313,7 +330,7 @@
         <div class="portfolio-flow"><span>01</span><b>PLAN</b><i>→</i><span>02</span><b>MATCH</b><i>→</i><span>03</span><b>ACTIVATE</b><i>→</i><span>04</span><b>REPORT</b></div>
       </article>
 
-      <article class="portfolio-case is-reverse reveal" aria-labelledby="case-unix-title">
+      <article class="portfolio-case is-reverse case-slide" id="case-slide-05" data-case-slide aria-hidden="true" aria-labelledby="case-unix-title">
         <div class="portfolio-copy">
           <div class="case-meta"><span>CASE / 05</span><span>CONSUMER INTELLIGENCE</span></div>
           <p class="case-kicker">㈜유닉스전자</p>
@@ -336,7 +353,7 @@
         <div class="portfolio-flow"><span>01</span><b>LISTEN</b><i>→</i><span>02</span><b>CLUSTER</b><i>→</i><span>03</span><b>INTERPRET</b><i>→</i><span>04</span><b>RECOMMEND</b></div>
       </article>
 
-      <article class="portfolio-case reveal" aria-labelledby="case-nonghyup-title">
+      <article class="portfolio-case case-slide" id="case-slide-06" data-case-slide aria-hidden="true" aria-labelledby="case-nonghyup-title">
         <div class="portfolio-copy">
           <div class="case-meta"><span>CASE / 06</span><span>COMMERCE OPERATIONS</span></div>
           <p class="case-kicker">농협중앙회</p>
@@ -352,6 +369,25 @@
         </div>
         <div class="portfolio-flow"><span>01</span><b>INGEST</b><i>→</i><span>02</span><b>MODEL</b><i>→</i><span>03</span><b>MONITOR</b><i>→</i><span>04</span><b>OPERATE</b></div>
       </article>
+      </div>
+
+      <nav class="case-controls" aria-label="Featured Work 사례 선택">
+        <button class="case-arrow" type="button" data-case-prev aria-label="이전 사례"><span>←</span><small>PREV</small></button>
+        <div class="case-pagination" role="tablist" aria-label="사례 바로가기">
+          <button class="is-active" type="button" role="tab" aria-selected="true" aria-controls="case-slide-01" data-case-go="0"><span>01</span><small>HYUNDAI</small></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="case-slide-02" data-case-go="1"><span>02</span><small>CESCO</small></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="case-slide-03" data-case-go="2"><span>03</span><small>NETNOGRAPHY</small></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="case-slide-04" data-case-go="3"><span>04</span><small>BAND&amp;CAST</small></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="case-slide-05" data-case-go="4"><span>05</span><small>UNIX</small></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="case-slide-06" data-case-go="5"><span>06</span><small>농협중앙회</small></button>
+        </div>
+        <button class="case-arrow" type="button" data-case-next aria-label="다음 사례"><small>NEXT</small><span>→</span></button>
+      </nav>
+      <div class="case-deck-status" aria-live="polite" aria-atomic="true">
+        <span class="case-current"><b data-case-current>01</b> / 06</span>
+        <strong data-case-name>현대자동차그룹 · 글로벌 리뷰 인텔리전스 플랫폼</strong>
+        <button type="button" data-case-pause aria-pressed="false"><i></i><span>PAUSE AUTO TURN</span></button>
+      </div>
       </div>
     </section>
 
@@ -465,6 +501,6 @@
     <p>© <span data-year></span> DATACAST INC.</p>
   </footer>
 
-  <script src="script.js?v=20260811-patents"></script>
+  <script src="script.js?v=20260813-deck"></script>
 </body>
 </html>
