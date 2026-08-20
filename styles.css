@@ -175,8 +175,9 @@ button { color: inherit; font: inherit; }
 .axis-x { width: 100%; height: 1px; }
 .axis-y { width: 1px; height: 100%; }
 .radar-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(233, 245, 117, .18), transparent 22%, transparent); animation: radar 5s linear infinite; }
-.radar strong { z-index: 2; margin-top: -4px; font-family: var(--display); font-size: 1.2rem; letter-spacing: .05em; }
-.radar small { position: absolute; z-index: 2; top: 55%; color: #858880; font-family: var(--display); font-size: .5rem; letter-spacing: .2em; }
+.radar-core { position: relative; z-index: 2; display: flex; min-width: 84px; flex-direction: column; gap: 3px; align-items: center; padding: 9px 10px 8px 12px; border-top: 1px solid rgba(233, 245, 117, .62); border-bottom: 1px solid rgba(233, 245, 117, .25); color: var(--paper-bright); background: rgba(10, 12, 10, .88); box-shadow: 0 0 28px rgba(0, 0, 0, .34); font-family: var(--display); line-height: 1; text-align: center; }
+.radar-core span:first-child { color: #8f938a; font-size: .39rem; font-weight: 500; letter-spacing: .26em; }
+.radar-core span:last-child { font-size: .68rem; font-weight: 650; letter-spacing: .22em; }
 .radar-point { position: absolute; width: 7px; height: 7px; border: 1px solid var(--acid); border-radius: 50%; box-shadow: 0 0 12px rgba(233, 245, 117, .65); }
 .point-one { top: 22%; right: 27%; }
 .point-two { left: 15%; bottom: 35%; }
